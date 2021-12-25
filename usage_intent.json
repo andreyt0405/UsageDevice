@@ -1,0 +1,31 @@
+{
+    "Google_Usage": "com.google.android.gms",
+    "Operation_Usage": "com.android.settings/com.samsung.android.settings",
+    "ReportDiagnostic": "ReportDiagnosticinfo",
+
+    "samsung": {
+        "8": {"Operation_Usage":".security.",
+            "Google_Usage":"/.usagereporting.settings.UsageReportingActivity"
+        },
+        "9": {"Operation_Usage":".security.",
+            "Google_Usage":"/.usagereporting.settings.UsageReportingActivity"},
+
+        "10":{"Operation_Usage":".privacy.",
+            "Google_Usage":"/.usagereporting.settings.UsageReportingActivity"},
+
+        "11":{"Operation_Usage":".privacy.",
+            "Google_Usage":"/.usagereporting.settings.UsageReportingActivity"}
+    },
+    "google": {
+        "8": {"Operation_Usage":".security."},
+        "9": {"Operation_Usage":".security."},
+        "10":{"Operation_Usage":".privacy."},
+        "11":{"Operation_Usage":".privacy."}
+},
+    "xiaomi": {
+        "8": {"Operation_Usage":".security."},
+        "9": {"Operation_Usage":".security."},
+        "10":{"Operation_Usage":".privacy."},
+        "11":{"Operation_Usage":".privacy."}
+}
+}
