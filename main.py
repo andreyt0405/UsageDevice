@@ -67,9 +67,9 @@ def main():
 
 if __name__ == '__main__':
     adb = AdbClient(host="127.0.0.1", port=5037)
-    tmp_sys_arg = sys.argv
+    sys_argv_temp = sys.argv
     for device in adb.device_list():
-        sys.argv = tmp_sys_arg
+        sys.argv = sys_argv_temp
         serialno = device.get_serialno()
         if main():
             uiAutomationObject = uiAutomation(serialno)
