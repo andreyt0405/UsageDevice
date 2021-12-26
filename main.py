@@ -10,6 +10,7 @@ def remove_log():
     pass
 
 
+
 def android_ui_operation():
     release = re.search(r"^([^.]*).*", adb.device(serial=serialno).getprop('ro.build.version.release')).group(1)
     vendor = adb.device(serial=serialno).getprop('ro.product.brand')
@@ -28,7 +29,6 @@ def android_ui_operation():
         print(f"{Except}")
         google_usage, usage_os = "Google_Usage", "Operation_Usage"
         exit(1)
-
     uiAutomationObject.disable_operation_diagnostic(usage_os)
     uiAutomationObject.disable_google_diagnostic(google_usage)
     remove_log()
@@ -72,5 +72,5 @@ if __name__ == '__main__':
         sys.argv = sys_argv_temp
         serialno = device.get_serialno()
         if main():
-            uiAutomationObject = uiAutomation(serialno)
+            uiAutomationObject = uiAutomation(serialno, adb)
             android_ui_operation()

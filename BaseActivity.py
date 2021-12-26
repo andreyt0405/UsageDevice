@@ -1,11 +1,15 @@
 from com.dtmilano.android.viewclient import ViewClient
+from adbutils import AdbClient, errors
 import re
 import ast
 
 
 class BaseActivity:
-    def __init__(self, serialno):
-        self.__device, self.__serialno = ViewClient.connectToDeviceOrExit(serialno=serialno)
+    def __init__(self, serialno, adb):
+        self.__adb = adb
+        self.__serialno = serialno
+        self.init_device()
+        self.__device, self.__serialno = ViewClient.connectToDeviceOrExit(serialno=self.__serialno)
         self.__vc = ViewClient(device=self.__device, serialno=self.__serialno)
 
     def _start_activity(self, component):
@@ -25,18 +29,16 @@ class BaseActivity:
         if element:
             element.touch()
 
-    def _unlock_device(self,pincode):
-        self.__device.unlock()
+    def init_device(self, pincode='1111'):
+        self.__adb.device(serial=self.__serialno).shell('input keyevent POWER')
+        self.__adb.device(serial=self.__serialno).shell('input touchscreen swipe 300 1000 300 300')
+        isKeyguardShowing = self.__adb.device(serial=self.__serialno).shell("dumpsys window | grep mStatusBar")
         lockScreenRE = re.compile('(isStatusBarKeyguard=(true|false)|isKeyguardShowing=(true|false))')
-        self.__device.wake()
-        self.__vc.swipe(300, 1000, 300, 300)
-        self.__vc.sleep(1)
-        isKeyguardShowing = self.__device.shell("dumpsys window | grep mStatusBar")
         statusBarKeyguard = lockScreenRE.search(isKeyguardShowing).group(0)
         x = re.search("true|false", lockScreenRE.search(isKeyguardShowing).group(0)).group(0)
         if ast.literal_eval(str(x).capitalize()):
-            self.__device.shell(f"input text {pincode}")
-            self.touch(self.find_by_text("OK"))
+            self.__adb.device(serial=self.__serialno).shell(f"input text {pincode}")
+            self.__adb.device(serial=self.__serialno).shell('input keyevent 66')
         else:
             print(f"[{statusBarKeyguard}]")
 
