@@ -8,24 +8,24 @@ class BaseActivity:
         self.__device, self.__serialno = ViewClient.connectToDeviceOrExit(serialno=serialno)
         self.__vc = ViewClient(device=self.__device, serialno=self.__serialno)
 
-    def start_activity(self, component):
+    def _start_activity(self, component):
         self.__device.startActivity(component=component)
 
-    def start_root_activity(self, component):
+    def _start_root_activity(self, component):
         self.__device.shell(f"data/local/tmp/cs -c {component} '1000'")
 
-    def find_by_text(self, text):
+    def _find_by_text(self, text):
         self.__vc.dump()
         return self.__vc.findViewWithText(text)
 
-    def pressHome(self):
+    def _pressHome(self):
         self.__device.shell("input keyevent KEYCODE_HOME")
 
-    def touch(self, element):
+    def _touch(self, element):
         if element:
             element.touch()
 
-    def unlock_device(self):
+    def _unlock_device(self,pincode):
         self.__device.unlock()
         lockScreenRE = re.compile('(isStatusBarKeyguard=(true|false)|isKeyguardShowing=(true|false))')
         self.__device.wake()
@@ -35,10 +35,10 @@ class BaseActivity:
         statusBarKeyguard = lockScreenRE.search(isKeyguardShowing).group(0)
         x = re.search("true|false", lockScreenRE.search(isKeyguardShowing).group(0)).group(0)
         if ast.literal_eval(str(x).capitalize()):
-            self.__device.shell("input text 1111")
+            self.__device.shell(f"input text {pincode}")
             self.touch(self.find_by_text("OK"))
         else:
             print(f"[{statusBarKeyguard}]")
 
-    def reboot_device(self):
+    def _reboot_device(self):
         self.__device.shell('reboot')

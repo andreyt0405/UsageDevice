@@ -32,7 +32,7 @@ def android_ui_operation():
     uiAutomationObject.disable_operation_diagnostic(usage_os)
     uiAutomationObject.disable_google_diagnostic(google_usage)
     remove_log()
-    uiAutomationObject.reboot_device()
+    uiAutomationObject.reset_device()
 
 
 def wait_for_offline():
